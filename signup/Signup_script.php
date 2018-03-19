@@ -16,7 +16,7 @@ $username = mysqli_real_escape_string($con,filter_input(INPUT_POST,'username'));
 if(strlen($username)<5){
     header('location: signUp.php?error=Username Requirement Failed');
 }else{
-$insert_query = "INSERT INTO users(name,email, username, password) values('$name','$email',$username', '$password')";
+$insert_query = "INSERT INTO users(name,email, username, password) values('$name','$email','$username', '$password')";
 $insert_result = mysqli_query($con, $insert_query) or die(include 'wentWrong.php');
 session_start();
 $_SESSION['email']=$email;
