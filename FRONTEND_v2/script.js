@@ -25,7 +25,7 @@ $(document).ready(function(){
             success: function(data){
                 var likes = data['likes'];
                 var unlikes = data['unlikes'];
-
+                
                 $("#likes_"+postid).text(likes);        // setting likes
                 $("#unlikes_"+postid).text(unlikes);    // setting unlikes
 

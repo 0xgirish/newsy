@@ -1,3 +1,5 @@
+<?php  session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -22,14 +24,20 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="login/login.php">LOGIN / SIGN UP</a>
+        <?php if(isset($_SESSION['username'])){
+            ?>
+            <a class="navbar-brand" href="../login/logout_script.php"> <?php echo $_SESSION['username']; echo " | LOGOUT";  ?></a>
+          <?php
+            } else{ ?>
+        <a class="navbar-brand" href="login/login.php"> LOGIN | SIGN UP</a>
+          <?php } ?>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" href="news.html">NEWS FEED</a>
+              <a class="nav-link" href="news.php">NEWS FEED</a>
             </li>
           </ul>
         </div>
@@ -63,9 +71,10 @@
           </div> -->
           <div class="col-lg-12 order-lg-1">
             <div class="p-5">
-              <h2 class="display-4" align="center"><?php  echo $title; ?></h2>
-             <?php if($imageurl != null) { ?>   <img src="$imageurl" class="img-responsive"> <?php } ?>
-              <p align="center"> <?php echo $descrp; ?> </p>
+              <h2 class="display-4" align="left"><?php  echo $title; ?></h2>
+            <?php if($timestamp != null) { ?>  <h6 align="left">Time : <?php echo $timestamp; ?></h6> <?php } ?>
+             <?php if($imageurl != null) { ?>   <img src="<?php echo $imageurl; ?>" class="img-responsive"><br/><br/> <?php } ?>
+              <p align="left"> <?php echo $descrp; ?> </p>
                 
             </div>
           </div>

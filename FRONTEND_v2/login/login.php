@@ -1,3 +1,11 @@
+<?php session_start(); 
+
+if(isset($_SESSION['id']))
+header("Location: ../news.php")
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +21,7 @@
 </head>
 <body>
 <div>
-<form action="../../login/login_submit.php" method="post">
+<form action="../../login/login_submit.php" method="post" id="logsing">
 <div class="login-wrap">                             
 	<div class="login-html">			
 		<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">LOG IN</label>
@@ -22,7 +30,7 @@
 			<div class="sign-in-htm">
 				<div class="group">
 					<label for="user" class="label">USERNAME</label>
-					<input name="username" id="user" type="text" class="input">
+					<input name="username" id="user" type="text" class="input" minlength="5" title="Minimum length 5">
 				</div>
 				<div class="group">
 					<label for="pass" class="label">PASSWORD</label>
@@ -30,7 +38,7 @@
 				</div>
 				<br>
 				<div class="group">
-					<input type="submit" class="button" value="Sign In">
+					<input type="submit" class="button" value="Sign In" onclick="modelog()">
 				</div>
 				<div class="hr"></div>
                  <?php if(filter_input(INPUT_GET, 'error') != null){
@@ -48,14 +56,14 @@
 				</div>
 				<div class="group">
 					<label for="pass" class="label">Password</label>
-					<input name="pass" id="pass" type="password" class="input" data-type="password">
+					<input name="password" id="pass" type="password" class="input" data-type="password">
 				</div>
 				<div class="group">
 					<label for="pass" class="label">Email Address</label>
 					<input name="email" id="pass" type="text" class="input">
 				</div>
 				<div class="group">
-					<input type="submit" class="button" value="Sign Up">
+					<input type="submit" class="button" value="Sign Up" onclick="modesign()">
 				</div>
                 <?php if(filter_input(INPUT_GET, 'error') != null){
                     $error = filter_input(INPUT_GET,'error'); echo '<br/><div><b>'.$error.'</b></div>';
@@ -68,10 +76,29 @@
 		</div>
 	</div>
 </div>
-</forum>
+</form>
+    <script>
+        function modelog(){
+            var objLog = document.createElement('INPUT');
+            objLog.type = "hidden";
+            objLog.name = "mode";
+            objLog.value = "login";
+            var objForm = document.getElementById("logsing");
+            objForm.append(objLog);
+            objForm.submit();
+        }
+        
+        function modesign(){
+            var objLog = document.createElement('INPUT');
+            objLog.type = "hidden";
+            objLog.name = "mode";
+            objLog.value = "signin";
+            var objForm = document.getElementById("logsing");
+            objForm.append(objLog);
+            objForm.submit();
+        }
+    </script>
 </div>  
-</html>  
-
 </body>
 
 </html>

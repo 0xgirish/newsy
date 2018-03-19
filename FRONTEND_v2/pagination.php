@@ -1,15 +1,15 @@
 <?php
 
-include "config.php";
+include "../includes/common.php";
+session_start();
 
 ?>
 <html>
     <head>
         <title>Like Unlike</title>
-        <link href="style.css" type="text/css" rel="stylesheet" />
-        <script src="jquery-3.3.1.js" type="text/javascript"></script>
-
-        <script src="script.js" type="text/javascript"></script>
+        <link href="style.css" like_type="text/css" rel="stylesheet" />
+        <script src="jquery-3.3.1.js" like_type="text/javascript"></script>
+        <script src="script.js" like_type="text/javascript"></script>
 
     </head>
     <body>
@@ -18,7 +18,7 @@ include "config.php";
             <?php
                 $userid = 5;
                 $rec_limit = 1;
-                $query = "SELECT count(id) as rec_count FROM posts";
+                $query = "SELECT count(id) as rec_count FROM articles";
                 $result = mysqli_query($con,$query);
                 $row = mysqli_fetch_array($result);
                 $rec_count = $row[rec_count];
@@ -33,7 +33,7 @@ include "config.php";
 
                  $orderby=0;
                  
-                if($orderby==0) $query = "SELECT * FROM posts ORDER BY timestamp DESC LIMIT ".$offset.", ".$rec_limit;
+                if($orderby==0) $query = "SELECT * FROM articles ORDER BY timestamp DESC LIMIT ".$offset.", ".$rec_limit;
                 $result = mysqli_query($con,$query);
                 while($row = mysqli_fetch_array($result)){
                     $postid = $row['id'];
@@ -42,7 +42,7 @@ include "config.php";
                     $type = -1;
 
                     // Checking user status
-                    $status_query = "SELECT id ,type,COUNT(*) as cntStatus FROM like_unlike WHERE userid=".$userid." and postid=".$postid." GROUP BY id";
+                    $status_query = "SELECT id ,type,COUNT(*) as cntStatus FROM user_likes WHERE user_id=".$userid." and article_id=".$postid." GROUP BY id";
                     $status_result = mysqli_query($con,$status_query);
                     $status_row = mysqli_fetch_array($status_result);
                     $count_status = $status_row['cntStatus'];
@@ -52,12 +52,12 @@ include "config.php";
                     
 
                     // Count post total likes and unlikes
-                    $like_query = "SELECT COUNT(*) AS cntLikes FROM like_unlike WHERE type=1 and postid=".$postid;
+                    $like_query = "SELECT COUNT(*) AS cntLikes FROM user_likes WHERE like_type=1 and article_id=".$postid;
                     $like_result = mysqli_query($con,$like_query);
                     $like_row = mysqli_fetch_array($like_result);
                     $total_likes = $like_row['cntLikes'];
 
-                    $unlike_query = "SELECT COUNT(*) AS cntUnlikes FROM like_unlike WHERE type=0 and postid=".$postid;
+                    $unlike_query = "SELECT COUNT(*) AS cntUnlikes FROM user_likes WHERE like_type=0 and article_id=".$postid;
                     $unlike_result = mysqli_query($con,$unlike_query);
                     $unlike_row = mysqli_fetch_array($unlike_result);
                     $total_unlikes = $unlike_row['cntUnlikes'];
@@ -70,9 +70,9 @@ include "config.php";
                         </div>
                         <div class="post-action">
 
-                            <input type="button" value="Like" id="like_<?php echo $postid; ?>" class="like" style="<?php if($type == 1){ echo "color: #ffa449;"; } ?>" />&nbsp;(<span id="likes_<?php echo $postid; ?>"><?php echo $total_likes; ?></span>)&nbsp;
+                            <input like_type="button" value="Like" id="like_<?php echo $postid; ?>" class="like" style="<?php if($type == 1){ echo "color: #ffa449;"; } ?>" />&nbsp;(<span id="likes_<?php echo $postid; ?>"><?php echo $total_likes; ?></span>)&nbsp;
 
-                            <input type="button" value="Unlike" id="unlike_<?php echo $postid; ?>" class="unlike" style="<?php if($type == 0){ echo "color: #ffa449;"; } ?>" />&nbsp;(<span id="unlikes_<?php echo $postid; ?>"><?php echo $total_unlikes; ?></span>)
+                            <input like_type="button" value="Unlike" id="unlike_<?php echo $postid; ?>" class="unlike" style="<?php if($type == 0){ echo "color: #ffa449;"; } ?>" />&nbsp;(<span id="unlikes_<?php echo $postid; ?>"><?php echo $total_unlikes; ?></span>)
 
                         </div>
                     </div>

@@ -3,9 +3,10 @@ from bs4 import BeautifulSoup
 import unicodedata
 from newspaper import Article, build, fulltext
 from urllib.request import urlopen
-#from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.blocking import BlockingScheduler
 from datetime import datetime, timedelta
 import time
+import os
 
 
 # def some_job():
@@ -61,40 +62,14 @@ class HT:
  
 
 
-ndtv_news = NDTV.get_urls()
-times_of_india_news = TOI.get_urls()
-hindustantimes_news = HT.get_urls()
-
-# info = []
-
-# for news in times_of_india_news:
-# 	article = Article(news)
-# 	article.download()
-# 	article.parse()
-# 	title = article.title
-# 	desc = article.text
-# 	link = news
-# 	time = article.html
-# 	source = "NDTV"
-# 	print(time)
 
 
-
-# p = HT.get_urls()
-
-# print(p[0])
-# article = Article(p[0])
-# article.download()
-# article.parse()
-# # print(article.top_image)
-# print((article.text))
-
-
-"""while 1:
-    print('Run something..')
-
-#     dt = datetime.now() + timedelta(minutes=1)
-
-    while datetime.now() < dt:
-        time.sleep(1)"""
-
+while True:
+	os.system("python addData.py")
+	dt = datetime.now() + timedelta(hours=1)
+	a = True
+	while datetime.now() < dt:
+		if a:
+			a = False
+			print("In Sleep")
+		time.sleep(1)

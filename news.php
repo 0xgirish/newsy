@@ -1,5 +1,3 @@
-<?php session_start(); ?>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -14,23 +12,17 @@
     <!-- Custom styles for this template -->
     <link href="css/one-page-wonder.min.css" rel="stylesheet">
   <style>
-    a:link {color:#ff0000;}
-    a:visited {color:#0000ff;}
-    a:hover {color:#ffcc00;}
-    body {text-align: justify;}
+	a:link {color:#ff0000;}
+	a:visited {color:#0000ff;}
+	a:hover {color:#ffcc00;}
+	body {text-align: justify;}
   </style>
   </head>
   <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
       <div class="container">
-          <?php if(isset($_SESSION['id'])){
-            ?>
-            <a class="navbar-brand" href="../login/logout_script.php"> <?php echo $_SESSION['username']; echo " | LOGOUT";  ?></a>
-          <?php
-            } else{ ?>
-        <a class="navbar-brand" href="login/login.php"> LOGIN | SIGN UP</a>
-          <?php } ?>
+        <a class="navbar-brand" href="login/login.php">LOGIN / SIGN UP</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -50,7 +42,9 @@
       <div class="container">
         <div class="row align-items-center">
         <?php
+
 include "../includes/common.php";
+
 ?>
 <html>
     <head>
@@ -67,9 +61,9 @@ include "../includes/common.php";
         <hr>
        
             <?php
-                $userid = $_SESSION['id'];
-                $rec_limit = 10;
-                $query = "SELECT count(id) as rec_count FROM articles";
+                $userid = 5;
+                $rec_limit = 1;
+                $query = "SELECT count(id) as rec_count FROM posts";
                 $result = mysqli_query($con,$query);
                 $row = mysqli_fetch_array($result);
                 $rec_count = $row[rec_count];
@@ -81,6 +75,7 @@ include "../includes/common.php";
                     $offset = 0;
                  }
                  $left_rec = $rec_count - ($page * $rec_limit);
+
                  $orderby=0;
                  if(isset($_GET["orderby"])){
                     $orderby=$_GET["orderby"];
@@ -88,56 +83,56 @@ include "../includes/common.php";
                     $orderby=0;
                  }
                  
-                if($orderby==0) $query = "SELECT * FROM articles ORDER BY time_stamp DESC LIMIT ".$offset.", ".$rec_limit;
+                if($orderby==0) $query = "SELECT * FROM posts ORDER BY timestamp DESC LIMIT ".$offset.", ".$rec_limit;
                 elseif ($orderby==1) {
-                    $query = "SELECT * FROM articles INNER JOIN (SELECT article_id ,SUM(like_type) as s from user_likes group by article_id) as t ON articles.id = t.article_id ORDER BY s DESC LIMIT ".$offset.", ".$rec_limit;
-                } ?>
-            
+                    $query = "SELECT * FROM posts INNER JOIN (SELECT postid ,SUM(type) as s from like_unlike group by postid) as t ON posts.id = t.postid ORDER BY s DESC LIMIT ".$offset.", ".$rec_limit;
+
+                }
+                $result = mysqli_query($con,$query);
+                while($row = mysqli_fetch_array($result)){
+                    $postid = $row['id'];
+                    $title = $row['title'];
+                    $content = $row['content'];
+                    $type = -1;
+
+                    // Checking user status
+                    $status_query = "SELECT id ,type,COUNT(*) as cntStatus FROM like_unlike WHERE userid=".$userid." and postid=".$postid." GROUP BY id";
+                    $status_result = mysqli_query($con,$status_query);
+                    $status_row = mysqli_fetch_array($status_result);
+                    $count_status = $status_row['cntStatus'];
+                    if($count_status > 0){
+                        $type = $status_row['type'];
+                    }
+                    
+
+                    // Count post total likes and unlikes
+                    $like_query = "SELECT COUNT(*) AS cntLikes FROM like_unlike WHERE type=1 and postid=".$postid;
+                    $like_result = mysqli_query($con,$like_query);
+                    $like_row = mysqli_fetch_array($like_result);
+                    $total_likes = $like_row['cntLikes'];
+
+                    $unlike_query = "SELECT COUNT(*) AS cntUnlikes FROM like_unlike WHERE type=0 and postid=".$postid;
+                    $unlike_result = mysqli_query($con,$unlike_query);
+                    $unlike_row = mysqli_fetch_array($unlike_result);
+                    $total_unlikes = $unlike_row['cntUnlikes'];
+
+            ?>
              <center>
         <form action="#" method="GET">
             <label class="radio-inline"><input type="radio" name="orderby" value="0" <?php if($orderby==0){echo "checked";} ?> >By Date</label>
 <label class="radio-inline"><input type="radio" name="orderby" value="1" <?php if($orderby==1){echo "checked";} ?> >By likes</label>
   <input type="submit" value="Go">
 </form></center>
-            <?php
-                $result = mysqli_query($con,$query);
-                while($row = mysqli_fetch_array($result)){
-                    $postid = $row['id'];
-                    $title = $row['Title'];
-                    $content = $row['description'];
-                    $type = -1;
-                    // Checking user status
-                    $status_query = "SELECT id ,like_type,COUNT(*) as cntStatus FROM user_likes WHERE user_id=".$userid." and article_id=".$postid." GROUP BY id";
-                    $status_result = mysqli_query($con,$status_query);
-                    $status_row = mysqli_fetch_array($status_result);
-                    $count_status = $status_row['cntStatus'];
-                    if($count_status > 0){
-                        $type = $status_row['like_type'];
-                    }
-                    
-                    // Count post total likes and unlikes
-                    $like_query = "SELECT COUNT(*) AS cntLikes FROM user_likes WHERE like_type=1 and article_id=".$postid;
-                    $like_result = mysqli_query($con,$like_query);
-                    $like_row = mysqli_fetch_array($like_result);
-                    $total_likes = $like_row['cntLikes'];
-                    $unlike_query = "SELECT COUNT(*) AS cntUnlikes FROM user_likes WHERE like_type=0 and article_id=".$postid;
-                    $unlike_result = mysqli_query($con,$unlike_query);
-                    $unlike_row = mysqli_fetch_array($unlike_result);
-                    $total_unlikes = $unlike_row['cntUnlikes'];
-            ?>   <div class="post">
+                    <div class="post">
                         <h1><?php echo $title; ?></h1>
                         <div class="post-text">
-                            <?php echo substr($content, 0, 120); ?> <a href="forum.php?postid=<?php echo $postid; ?>"> .. Read More</a>
+                            <?php echo $content; ?>
                         </div>
                         <div class="post-action">
 
-                            <?php if(!(isset($_SESSION['id']))) echo "<a href='login/login.php'>"; ?>
                             <input type="button" value="Like" id="like_<?php echo $postid; ?>" class="like" style="<?php if($type == 1){ echo "color: #ffa449;"; } ?>" />&nbsp;(<span id="likes_<?php echo $postid; ?>"><?php echo $total_likes; ?></span>)&nbsp;
 
                             <input type="button" value="Unlike" id="unlike_<?php echo $postid; ?>" class="unlike" style="<?php if($type == 0){ echo "color: #ffa449;"; } ?>" />&nbsp;(<span id="unlikes_<?php echo $postid; ?>"><?php echo $total_unlikes; ?></span>)
-                            
-                            <?php if(!(isset($_SESSION['id']))) echo "</a>"; ?>
-                            
 
                         </div>
                     </div>
