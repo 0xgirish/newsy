@@ -1,4 +1,4 @@
-from scrap import HT
+from scrap import HT, NDTV ,TOI
 from newspaper import Article
 import pymysql
 from datetime import datetime
@@ -31,8 +31,15 @@ class artAdd:
         return publish_date
 
 ht_urls = HT.get_urls()
+ndtv_urls = NDTV.get_urls()
+toi_urls = TOI.get_urls()
 
-articles = artAdd(ht_urls)
+urls = []
+urls.extend(ht_urls)
+urls.extend(ndtv_urls)
+urls.extend(toi_urls)
+
+articles = artAdd(urls)
 articles.download()
 articles.parse()
 
@@ -45,9 +52,9 @@ num_articles = len(titles)
 
 source = "Hindustan Times"
 
-# db = pymysql.connect("localhost", "root", "12qwaszx", "newsy")
+db = pymysql.connect("localhost", "root", "12qwaszx", "newsy")
 
-# cursor = db.cursor()
+cursor = db.cursor()
 
 for i in range(num_articles):
     try:
@@ -55,4 +62,4 @@ for i in range(num_articles):
         cursor.execute(query)
         db.commit()
 
-# db.close()
+db.close()
