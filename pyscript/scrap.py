@@ -6,8 +6,9 @@ from urllib.request import urlopen
 
 
 class NDTV:
-	feed_url = "http://feeds.feedburner.com/ndtvnews-latest"
-	def get_urls(feed_url):
+	def get_urls():
+
+		feed_url = "http://feeds.feedburner.com/ndtvnews-latest"
 		url = urlopen(feed_url)
 		soup = BeautifulSoup(url, 'xml')
 		pages = []
@@ -18,7 +19,8 @@ class NDTV:
 		return pages
 
 class TOI:
-	def get_urls(feed_url):
+	def get_urls():
+		feed_url = "https://timesofindia.indiatimes.com/"
 		url = urlopen(feed_url)
 		soup = BeautifulSoup(url, 'lxml')
 		pages = []
@@ -33,7 +35,8 @@ class TOI:
 		return pages
 
 class HT:
-	def get_urls(feed_url):
+	def get_urls():
+		feed_url = "https://www.hindustantimes.com/latest-news/"
 		url = urlopen(feed_url)
 		soup = BeautifulSoup(url, 'lxml')
 		pages = []
@@ -44,16 +47,34 @@ class HT:
 				pages.append(link)
 		return pages
 
+ 
 
-p = HT.get_urls("https://www.hindustantimes.com/latest-news/")
 
-print(p[0])
-article = Article(p[0])
-article.download()
-article.parse()
-print(article.title)
-print(article.text)
+ndtv_news = NDTV.get_urls()
+times_of_india_news = TOI.get_urls()
+hindustantimes_news = HT.get_urls()
 
-# ht = build("https://www.hindustantimes.com/latest-news/")
-# for article in ht.articles:
-# 	print(article.url)
+# info = []
+
+# for news in times_of_india_news:
+# 	article = Article(news)
+# 	article.download()
+# 	article.parse()
+# 	title = article.title
+# 	desc = article.text
+# 	link = news
+# 	time = article.html
+# 	source = "NDTV"
+# 	print(time)
+
+
+
+# p = HT.get_urls("https://www.hindustantimes.com/latest-news/")
+
+# print(p[0])
+# article = Article(p[0])
+# article.download()
+# article.parse()
+# print(article.title)
+# print(article.text)
+
