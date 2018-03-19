@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import unicodedata
 from newspaper import Article, build, fulltext
 from urllib.request import urlopen
-from apscheduler.schedulers.blocking import BlockingScheduler
+#from apscheduler.schedulers.blocking import BlockingScheduler
 from datetime import datetime, timedelta
 import time
 
@@ -90,11 +90,11 @@ hindustantimes_news = HT.get_urls()
 # print((article.text))
 
 
-while 1:
+"""while 1:
     print('Run something..')
 
     dt = datetime.now() + timedelta(minutes=1)
 
     while datetime.now() < dt:
-        time.sleep(1)
+        time.sleep(1)"""
 

@@ -50,9 +50,9 @@ db = pymysql.connect("localhost", "root", "12qwaszx", "newsy")
 cursor = db.cursor()
 
 for i in range(num_articles):
-    query = "INSERT INTO `articles`(`Title`, `description`, `source`, `time_stamp`) values(\"%s\", \"%s\", \"%s\", \"%s\")" %(pymysql.escape_string(titles[i].decode("utf-8")),pymysql.escape_string(descrp[i].decode("utf-8")), source,pymysql.escape_string(str(time_stamp[i])))
-    #print("(%s, %s, %s, %s)" %(titles[i], descrp[i], source, time_stamp[i]))
-    cursor.execute(query)
-    db.commit()
+    try:
+        query = "INSERT INTO `articles`(`Title`, `description`, `source`, `time_stamp`) values(\"%s\", \"%s\", \"%s\", \"%s\")" %(pymysql.escape_string(titles[i].decode("utf-8")),pymysql.escape_string(descrp[i].decode("utf-8")), source,time_stamp[i].strftime('%Y-%m-%d %H:%M:%S'))
+        cursor.execute(query)
+        db.commit()
 
 db.close()
