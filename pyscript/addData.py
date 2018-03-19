@@ -2,6 +2,8 @@ from scrap import HT
 from newspaper import Article
 import pymysql
 from datetime import datetime
+import unicodedata
+
 
 class artAdd:
 
@@ -17,11 +19,11 @@ class artAdd:
             article.parse()
 
     def get_titles(self):
-        titles = [article.title for article in self.articles]
+        titles = [unicodedata.normalize('NFKD', article.title).encode('ascii','ignore') for article in self.articles]
         return titles
 
     def get_description(self):
-        description = [article.text for article in self.articles]
+        description = [unicodedata.normalize('NFKD', article.text).encode('ascii','ignore') for article in self.articles]
         return description
 
     def get_publish_date(self):
