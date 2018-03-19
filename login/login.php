@@ -29,7 +29,7 @@ if(isset($_SESSION['email'])){
                         <br/>
                         <form method="post" action="login_submit.php">
                             <div class="form-group">
-                                <input type="email" name="email" placeholder="e-mail" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required/>
+                                <input type="text" name="username" placeholder="username" class="form-control" minlength="5"  required/>
                             </div>
                             <div class="form-group">
                                 <input type="password" name="password" placeholder="password" autocomplete="off" class="form-control" required/>
