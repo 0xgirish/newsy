@@ -1,5 +1,5 @@
 <?php
-require './includes/common.php' ;
+require '../includes/common.php' ;
 $email = mysqli_real_escape_string($con,filter_input(INPUT_POST, 'email'));
 $password = mysqli_real_escape_string($con,md5(filter_input(INPUT_POST,'password')));
 $query = "SELECT id, password FROM users WHERE email = '$email'";
