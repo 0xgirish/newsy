@@ -1,8 +1,19 @@
 import requests
 from bs4 import BeautifulSoup
 import unicodedata
-from newspaper import Article, build
+from newspaper import Article, build, fulltext
 from urllib.request import urlopen
+from apscheduler.schedulers.blocking import BlockingScheduler
+from datetime import datetime, timedelta
+import time
+
+
+# def some_job():
+#     print ("Decorated job")
+
+# scheduler = BlockingScheduler()
+# scheduler.add_job(some_job, 'interval', minutes=1)
+# scheduler.start()
 
 
 class NDTV:
@@ -29,7 +40,7 @@ class TOI:
 				for a in li.find_all('a', href=True):
 					link = a['href']
 					if link[0] == '/':
-						link = "https://timesofindia.indiatimes.com/" + link
+						link = "https://timesofindia.indiatimes.com" + link
 					pages.append(link)
 		
 		return pages
@@ -69,12 +80,21 @@ hindustantimes_news = HT.get_urls()
 
 
 
-# p = HT.get_urls("https://www.hindustantimes.com/latest-news/")
+# p = HT.get_urls()
 
 # print(p[0])
 # article = Article(p[0])
 # article.download()
 # article.parse()
-# print(article.title)
-# print(article.text)
+# # print(article.top_image)
+# print((article.text))
+
+
+while 1:
+    print('Run something..')
+
+    dt = datetime.now() + timedelta(minutes=1)
+
+    while datetime.now() < dt:
+        time.sleep(1)
 
