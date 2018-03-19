@@ -1,29 +1,20 @@
 <?php
-require './includes/common.php' ;
-$email = mysqli_real_escape_string($con,filter_input(INPUT_POST, 'email'));
-$password = mysqli_real_escape_string($con,md5(filter_input(INPUT_POST,'password')));
-$query = "SELECT id, password FROM users WHERE email = '$email'";
+require '../includes/common.php' ;
+$username = mysqli_real_escape_string($con, filter_input(INPUT_POST, 'username'));
+$password = mysqli_real_escape_string($con, md5(filter_input(INPUT_POST,'password')));
+$query = "SELECT id, password FROM users WHERE username = '$username'";
 $query_result = mysqli_query($con, $query) or die(mysqli_error($con));
 $row = mysqli_fetch_array($query_result);
 $num_row = mysqli_num_rows($query_result);
 if($num_row != 0){
-if($password == $row['password']){
-    //session_destroy();
-    session_start();
-    $_SESSION['id'] = $row['id'];
-    $_SESSION['email'] = $email;
-    $_SESSION['id'] = $row['id'];
-    $pid = filter_input(INPUT_POST,'pid');
-    if($pid){
-        $quantity = filter_input(INPUT_POST,'quantity');
-        header("location: cart-add.php?pid=$pid&quantity=$quantity");
+    if($password == $row['password']){
+        session_start();
+        $_SESSION['id'] = $row['id'];
+        $_SESSION['username'] = $username;
     }else{
-    header("Location: home.php");
+        header("Location: index.php?mode=login&error=wrong%20password");
     }
 }else{
-    header("Location: index.php?mode=login&error=wrong%20password");
-}
-}else{
-    header("Location: index.php?mode=login&error=wrong email");
+    header("Location: index.php?mode=login&error=username does not exist");
 }
 ?>
