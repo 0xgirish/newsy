@@ -12,10 +12,10 @@
     <!-- Custom styles for this template -->
     <link href="css/one-page-wonder.min.css" rel="stylesheet">
   <style>
-	a:link {color:#ff0000;}
-	a:visited {color:#0000ff;}
-	a:hover {color:#ffcc00;}
-	body {text-align: justify;}
+    a:link {color:#ff0000;}
+    a:visited {color:#0000ff;}
+    a:hover {color:#ffcc00;}
+    body {text-align: justify;}
   </style>
   </head>
   <body>
@@ -42,9 +42,7 @@
       <div class="container">
         <div class="row align-items-center">
         <?php
-
 include "config.php";
-
 ?>
 <html>
     <head>
@@ -63,7 +61,7 @@ include "config.php";
             <?php
                 $userid = 5;
                 $rec_limit = 1;
-                $query = "SELECT count(id) as rec_count FROM posts";
+                $query = "SELECT count(id) as rec_count FROM articles";
                 $result = mysqli_query($con,$query);
                 $row = mysqli_fetch_array($result);
                 $rec_count = $row[rec_count];
@@ -75,7 +73,6 @@ include "config.php";
                     $offset = 0;
                  }
                  $left_rec = $rec_count - ($page * $rec_limit);
-
                  $orderby=0;
                  if(isset($_GET["orderby"])){
                     $orderby=$_GET["orderby"];
@@ -83,10 +80,9 @@ include "config.php";
                     $orderby=0;
                  }
                  
-                if($orderby==0) $query = "SELECT * FROM posts ORDER BY timestamp DESC LIMIT ".$offset.", ".$rec_limit;
+                if($orderby==0) $query = "SELECT * FROM articles ORDER BY time_stamp DESC LIMIT ".$offset.", ".$rec_limit;
                 elseif ($orderby==1) {
-                    $query = "SELECT * FROM posts INNER JOIN (SELECT postid ,SUM(type) as s from like_unlike group by postid) as t ON posts.id = t.postid ORDER BY s DESC LIMIT ".$offset.", ".$rec_limit;
-
+                    $query = "SELECT * FROM articles INNER JOIN (SELECT article_id ,SUM(like_type) as s from user_likes group by article_id) as t ON articles.id = t.article_id ORDER BY s DESC LIMIT ".$offset.", ".$rec_limit;
                 }
                 $result = mysqli_query($con,$query);
                 while($row = mysqli_fetch_array($result)){
@@ -94,28 +90,24 @@ include "config.php";
                     $title = $row['title'];
                     $content = $row['content'];
                     $type = -1;
-
                     // Checking user status
-                    $status_query = "SELECT id ,type,COUNT(*) as cntStatus FROM like_unlike WHERE userid=".$userid." and postid=".$postid." GROUP BY id";
+                    $status_query = "SELECT id ,like_type,COUNT(*) as cntStatus FROM user_likes WHERE user_id=".$userid." and article_id=".$postid." GROUP BY id";
                     $status_result = mysqli_query($con,$status_query);
                     $status_row = mysqli_fetch_array($status_result);
                     $count_status = $status_row['cntStatus'];
                     if($count_status > 0){
-                        $type = $status_row['type'];
+                        $type = $status_row['like_type'];
                     }
                     
-
                     // Count post total likes and unlikes
-                    $like_query = "SELECT COUNT(*) AS cntLikes FROM like_unlike WHERE type=1 and postid=".$postid;
+                    $like_query = "SELECT COUNT(*) AS cntLikes FROM user_likes WHERE like_type=1 and article_id=".$postid;
                     $like_result = mysqli_query($con,$like_query);
                     $like_row = mysqli_fetch_array($like_result);
                     $total_likes = $like_row['cntLikes'];
-
-                    $unlike_query = "SELECT COUNT(*) AS cntUnlikes FROM like_unlike WHERE type=0 and postid=".$postid;
+                    $unlike_query = "SELECT COUNT(*) AS cntUnlikes FROM user_likes WHERE like_type=0 and postid=".$postid;
                     $unlike_result = mysqli_query($con,$unlike_query);
                     $unlike_row = mysqli_fetch_array($unlike_result);
                     $total_unlikes = $unlike_row['cntUnlikes'];
-
             ?>
              <center>
         <form action="#" method="GET">
