@@ -30,7 +30,7 @@ class artAdd:
         publish_date = [article.publish_date for article in self.articles]
         return publish_date
 
-ht_urls = HT.get_urls("https://www.hindustantimes.com/latest-news/")
+ht_urls = HT.get_urls()
 
 articles = artAdd(ht_urls)
 articles.download()
@@ -41,6 +41,7 @@ descrp = articles.get_description()
 time_stamp = articles.get_publish_date()
 
 num_articles = len(titles)
+#print(num_articles)
 
 source = "Hindustan Times"
 
@@ -49,7 +50,9 @@ db = pymysql.connect("localhost", "root", "12qwaszx", "newsy")
 cursor = db.cursor()
 
 for i in range(num_articles):
-    query = "INSERT INTO articles(Title, description, source, time_stamp) values({}, {}, {}, {})".format(titles[i], descrp[i], source, str(time_stamp[i]))
+    query = "INSERT INTO `articles`(`Title`, `description`, `source`, `time_stamp`) values(\"%s\", \"%s\", \"%s\", \"%s\")" %(pymysql.escape_string(titles[i].decode("utf-8")),pymysql.escape_string(descrp[i].decode("utf-8")), source,pymysql.escape_string(str(time_stamp[i])))
+    #print("(%s, %s, %s, %s)" %(titles[i], descrp[i], source, time_stamp[i]))
     cursor.execute(query)
+    db.commit()
 
 db.close()

@@ -29,7 +29,7 @@ class TOI:
 				for a in li.find_all('a', href=True):
 					link = a['href']
 					if link[0] == '/':
-						link = "https://timesofindia.indiatimes.com/" + link
+						link = "https://timesofindia.indiatimes.com" + link
 					pages.append(link)
 		
 		return pages
