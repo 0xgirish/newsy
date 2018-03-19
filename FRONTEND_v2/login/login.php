@@ -33,8 +33,8 @@
 					<input type="submit" class="button" value="Sign In">
 				</div>
 				<div class="hr"></div>
-                <?php if(filter_input(INPUT_GET, 'error') != null){
-                    $error = filter_input(INPUT_GET,'error'); echo '<div style="color:red"><b>'.$error.'</b></div>';
+                 <?php if(filter_input(INPUT_GET, 'error') != null){
+                    $error = filter_input(INPUT_GET,'error'); echo '<div><b>'.$error.'</b></div>';
                 }?>
 			</div>
 			<div class="sign-up-htm">
@@ -57,12 +57,12 @@
 				<div class="group">
 					<input type="submit" class="button" value="Sign Up">
 				</div>
+                <?php if(filter_input(INPUT_GET, 'error') != null){
+                    $error = filter_input(INPUT_GET,'error'); echo '<br/><div><b>'.$error.'</b></div>';
+                    }?>
 				<div class="hr"></div>
 				<div class="foot-lnk">
                     <label for="tab-1">Already Member?</a>
-                    <?php if(filter_input(INPUT_GET, 'error') != null){
-                    $error = filter_input(INPUT_GET,'error'); echo '<div style="color:red"><b>'.$error.'</b></div>';
-                    }?>
 				</div>
 			</div>
 		</div>

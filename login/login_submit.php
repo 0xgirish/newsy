@@ -13,10 +13,10 @@ if(filter_input(INPUT_POST, 'username') != null){
             $_SESSION['id'] = $row['id'];
             $_SESSION['username'] = $username;
         }else{
-            header("Location: ../FRONTEND_v2/login/login.html?error=wrong%20password");
+            header("Location: ../FRONTEND_v2/login/login.php?error=wrong%20password");
         }
     }else{
-        header("Location: ../FRONTEND_v2/login/login.html?error=username does not exist");
+        header("Location: ../FRONTEND_v2/login/login.php?error=username does not exist");
     }
 }else if(filter_input(INPUT_POST, 'user_name') != null){
     
@@ -32,21 +32,21 @@ if(filter_input(INPUT_POST, 'username') != null){
         $email_exist = $con->query($query) or die(include 'wentWrong.php');
         $result = $email_exist->fetch_assoc();
         if($result['num'] > 0){
-            header('location: ../FRONTEND_v2/login/login.html?error=Email already exist');
+            header('location: ../FRONTEND_v2/login/login.php?error=Email already exist');
         }else{
             $query = "SELECT count(*) as num FROM users WHERE username = '$username'";
             $username_exist = $con->query($query);
             $result = $username_exist->fetch_assoc();
             if($result['num'] > 0){
-                header('../FRONTEND_v2/login/login.html?error=Username already exist');
+                header('../FRONTEND_v2/login/login.php?error=Username already exist');
             }else{
                 if(strlen($pass)< 7){
-                        header('location: ../FRONTEND_v2/login/login.html?error=Password Requirement Failed');
+                        header('location: ../FRONTEND_v2/login/login.php?error=Password Requirement Failed');
                 }else{
                     $password = mysqli_real_escape_string($con,md5($pass));
                     $name = mysqli_real_escape_string($con,filter_input(INPUT_POST,'name'));
                     if(strlen($username)<5){
-                        header('location: ../FRONTEND_v2/login/login.html?error=Username Requirement Failed');
+                        header('location: ../FRONTEND_v2/login/login.php?error=Username Requirement Failed');
                     }else{
                         $insert_query = "INSERT INTO users(name,email, username, password) values('$name','$email','$username', '$password')";
                         $insert_result = mysqli_query($con, $insert_query);
