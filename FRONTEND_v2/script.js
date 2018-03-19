@@ -12,7 +12,7 @@ $(document).ready(function(){
         var type = 0;
         if(text == "like"){
             type = 1;
-        }else{
+        }else if(text == "unlike"){
             type = 0;
         }
 
@@ -23,18 +23,15 @@ $(document).ready(function(){
             data: {postid:postid,type:type},
             dataType: 'json',
             success: function(data){
-                var likes = data['likes'];
-                var unlikes = data['unlikes'];
-                
-                $("#likes_"+postid).text(likes);        // setting likes
-                $("#unlikes_"+postid).text(unlikes);    // setting unlikes
 
                 if(type == 1){
+                    var likes = data['likes'];
+                    $("#likes_"+postid).text(likes); 
                     $("#like_"+postid).css("color","#ffa449");
                     $("#unlike_"+postid).css("color","lightseagreen");
-                }
-
-                if(type == 0){
+                }else if(type == 0){
+                    var unlikes = data['unlikes'];
+                    $("#unlikes_"+postid).text(unlikes); 
                     $("#unlike_"+postid).css("color","#ffa449");
                     $("#like_"+postid).css("color","lightseagreen");
                 }

@@ -4,9 +4,6 @@ import unicodedata
 from newspaper import Article, build, fulltext
 from urllib.request import urlopen
 from apscheduler.schedulers.blocking import BlockingScheduler
-from datetime import datetime, timedelta
-import time
-import os
 
 
 # def some_job():
@@ -18,6 +15,7 @@ import os
 
 
 class NDTV:
+	@staticmethod
 	def get_urls():
 
 		feed_url = "http://feeds.feedburner.com/ndtvnews-latest"
@@ -31,6 +29,7 @@ class NDTV:
 		return pages
 
 class TOI:
+	@staticmethod
 	def get_urls():
 		feed_url = "https://timesofindia.indiatimes.com/"
 		url = urlopen(feed_url)
@@ -47,6 +46,7 @@ class TOI:
 		return pages
 
 class HT:
+	@staticmethod
 	def get_urls():
 		feed_url = "https://www.hindustantimes.com/latest-news/"
 		url = urlopen(feed_url)
@@ -58,18 +58,3 @@ class HT:
 					link = a['href']	
 				pages.append(link)
 		return pages
-
- 
-
-
-
-
-while True:
-	os.system("python addData.py")
-	dt = datetime.now() + timedelta(hours=1)
-	a = True
-	while datetime.now() < dt:
-		if a:
-			a = False
-			print("In Sleep")
-		time.sleep(1)

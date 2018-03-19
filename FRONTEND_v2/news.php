@@ -15,7 +15,6 @@
     <link href="css/one-page-wonder.min.css" rel="stylesheet">
   <style>
     a:link {color:#ff0000;}
-    a:visited {color:#0000ff;}
     a:hover {color:#ffcc00;}
     body {text-align: justify;}
   </style>
@@ -127,7 +126,7 @@ include "../includes/common.php";
             ?>   <div class="post">
                         <h1><?php echo $title; ?></h1>
                         <div class="post-text">
-                            <?php echo substr($content, 0, 120); ?> <a href="forum.php?postid=<?php echo $postid; ?>"> .. Read More</a>
+                            <?php echo substr($content, 0, 240); ?> <a href="forum.php?postid=<?php echo $postid; ?>"> .. Read More</a>
                         </div>
                         <div class="post-action">
 
@@ -167,7 +166,7 @@ include "../includes/common.php";
     <!-- Footer -->
     <footer class="py-5 bg-black">
       <div class="container">
-        <p class="m-0 text-center text-white small">Contibutors:<br>Girish,Chirag,Karan,Arunaksha</p>
+        <p class="m-0 text-center text-white small">Contibutors:<br>Girish Kumar, Chirag Khurana, Karan Seghal ,Arunaksha Tlukadar</p>
       </div>
       <!-- /.container -->
     </footer>

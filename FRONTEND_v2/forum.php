@@ -15,7 +15,6 @@
     <link href="css/one-page-wonder.min.css" rel="stylesheet">
   <style>
 	a:link {color:#ff0000;}
-	a:visited {color:#0000ff;}
 	a:hover {color:#ffcc00;}
 	body {text-align: justify;}
   </style>
@@ -93,7 +92,7 @@
   <!-- Footer -->
     <footer class="py-5 bg-black">
       <div class="container">
-        <p class="m-0 text-center text-white small">Contibutors: Girish, Chirag, Karan, Arunaksha</p>
+        <p class="m-0 text-center text-white small">Contibutors: Girish Kumar, Chirag Khurana, Karan Seghal ,Arunaksha Tlukadar</p>
       </div>
       <!-- /.container -->
     </footer>

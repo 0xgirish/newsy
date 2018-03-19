@@ -10,29 +10,35 @@ class artAdd:
     def __init__(self, urls):
         self.articles = [Article(url) for url in urls]
 
-    def download(self):
+    def get_details(self):
+        title = []
+        descrp = []
+        publish_date = []
+        image_url = []
         for article in self.articles:
-            article.download()
-
-    def parse(self):
-        for article in self.articles:
-            article.parse()
-
-    def get_titles(self):
-        titles = [unicodedata.normalize('NFKD', article.title).encode('ascii','ignore') for article in self.articles]
-        return titles
-
-    def get_description(self):
-        description = [unicodedata.normalize('NFKD', article.text).encode('ascii','ignore') for article in self.articles]
-        return description
-
-    def get_publish_date(self):
-        publish_date = [article.publish_date for article in self.articles]
-        return publish_date
-
-    def get_image_url(self):
-        image_url = [article.top_image for article in self.articles]
-        return image_url
+            try:
+                article.download()
+                article.parse()
+                title.append(unicodedata.normalize('NFKD', article.title).encode('ascii','ignore'))
+                descrp.append(unicodedata.normalize('NFKD', article.text).encode('ascii','ignore'))
+                publish_date.append(article.publish_date)
+                image_url.append(article.top_image)
+            except:
+                minlen = min(len(title), len(descrp), len(publish_date), len(image_url))
+                maxlen = max(len(title), len(descrp), len(publish_date), len(image_url))
+                if (maxlen - minlen) == 0:
+                    pass
+                else:
+                    ab = minlen
+                    fet = [title, descrp, publish_date, image_url]
+                    for _ in range(maxlen - minlen):
+                        for f in fet:
+                            if(len(f) <= ab):
+                                continue
+                            else:
+                                f.remove(f[-1])
+                        
+        return title, descrp, publish_date, image_url
 
 def run():
 
@@ -46,13 +52,8 @@ def run():
     urls.extend(toi_urls)
 
     articles = artAdd(urls)
-    articles.download()
-    articles.parse()
 
-    titles = articles.get_titles()
-    descrp = articles.get_description()
-    time_stamp = articles.get_publish_date()
-    image_url = articles.get_image_url()
+    titles, descrp, time_stamp, image_url = articles.get_details()
 
     num_articles = len(titles)
     #print(num_articles)
@@ -66,14 +67,14 @@ def run():
     for i in range(num_articles):
         try:
             if time_stamp[i] == None:
-                query = "INSERT INTO `articles`(`Title`, `description`, `source`, `link`, `image_url`) values(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")" %(pymysql.escape_string(titles[i].decode("utf-8")), pymysql.escape_string(descrp[i].decode("utf-8")),source ,urls[i], image_url[i])
+                query = "INSERT INTO `articles`(`Title`, `description`, `source`, `time_stamp`, `link`, `image_url`) values(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")" %(pymysql.escape_string(titles[i].decode("utf-8")), pymysql.escape_string(descrp[i].decode("utf-8")),source, datetime.now().strftime('%Y-%m-%d %H:%M:%S') ,urls[i], image_url[i])
             else:
                 query = "INSERT INTO `articles`(`Title`, `description`, `source`, `time_stamp`, `link`, `image_url`) values(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")" %(pymysql.escape_string(titles[i].decode("utf-8")),pymysql.escape_string(descrp[i].decode("utf-8")), source,time_stamp[i].strftime('%Y-%m-%d %H:%M:%S'), urls[i], image_url[i])
             cursor.execute(query)
             db.commit()
-        except pymysql.MySQLError:
-            #code, *msg = e.args
-            #print("ERROR CODE: {} | {}".format(code, *msg))
+        except pymysql.MySQLError as e:
+            code, *msg = e.args
+            print("ERROR CODE: {} | {}".format(code, *msg))
             pass
 
     db.close()
