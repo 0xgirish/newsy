@@ -34,44 +34,46 @@ class artAdd:
         image_url = [article.top_image for article in self.articles]
         return image_url
 
-ht_urls = HT.get_urls()
-ndtv_urls = NDTV.get_urls()
-toi_urls = TOI.get_urls()
+def run():
 
-urls = []
-urls.extend(ht_urls)
-urls.extend(ndtv_urls)
-urls.extend(toi_urls)
+    ht_urls = HT.get_urls()
+    ndtv_urls = NDTV.get_urls()
+    toi_urls = TOI.get_urls()
 
-articles = artAdd(urls)
-articles.download()
-articles.parse()
+    urls = []
+    urls.extend(ht_urls)
+    urls.extend(ndtv_urls)
+    urls.extend(toi_urls)
 
-titles = articles.get_titles()
-descrp = articles.get_description()
-time_stamp = articles.get_publish_date()
-image_url = articles.get_image_url()
+    articles = artAdd(urls)
+    articles.download()
+    articles.parse()
 
-num_articles = len(titles)
-#print(num_articles)
+    titles = articles.get_titles()
+    descrp = articles.get_description()
+    time_stamp = articles.get_publish_date()
+    image_url = articles.get_image_url()
 
-source = "Hindustan Times"
+    num_articles = len(titles)
+    #print(num_articles)
 
-db = pymysql.connect("localhost", "root", "12qwaszx", "newsy")
+    source = "Hindustan Times"
 
-cursor = db.cursor()
+    db = pymysql.connect("localhost", "root", "12qwaszx", "newsy")
 
-for i in range(num_articles):
-    try:
-        if time_stamp[i] == None:
-            query = "INSERT INTO `articles`(`Title`, `description`, `source`, `link`, `image_url`) values(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")" %(pymysql.escape_string(titles[i].decode("utf-8")), pymysql.escape_string(descrp[i].decode("utf-8")),source ,urls[i], image_url[i])
-        else:
-            query = "INSERT INTO `articles`(`Title`, `description`, `source`, `time_stamp`, `link`, `image_url`) values(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")" %(pymysql.escape_string(titles[i].decode("utf-8")),pymysql.escape_string(descrp[i].decode("utf-8")), source,time_stamp[i].strftime('%Y-%m-%d %H:%M:%S'), urls[i], image_url[i])
-        cursor.execute(query)
-        db.commit()
-    except pymysql.MySQLError as e:
-        #code, *msg = e.args
-        #print("ERROR CODE: {} | {}".format(code, *msg))
-        pass
+    cursor = db.cursor()
 
-db.close()
+    for i in range(num_articles):
+        try:
+            if time_stamp[i] == None:
+                query = "INSERT INTO `articles`(`Title`, `description`, `source`, `link`, `image_url`) values(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")" %(pymysql.escape_string(titles[i].decode("utf-8")), pymysql.escape_string(descrp[i].decode("utf-8")),source ,urls[i], image_url[i])
+            else:
+                query = "INSERT INTO `articles`(`Title`, `description`, `source`, `time_stamp`, `link`, `image_url`) values(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")" %(pymysql.escape_string(titles[i].decode("utf-8")),pymysql.escape_string(descrp[i].decode("utf-8")), source,time_stamp[i].strftime('%Y-%m-%d %H:%M:%S'), urls[i], image_url[i])
+            cursor.execute(query)
+            db.commit()
+        except pymysql.MySQLError:
+            #code, *msg = e.args
+            #print("ERROR CODE: {} | {}".format(code, *msg))
+            pass
+
+    db.close()
