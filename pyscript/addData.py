@@ -45,9 +45,9 @@ num_articles = len(titles)
 
 source = "Hindustan Times"
 
-db = pymysql.connect("localhost", "root", "12qwaszx", "newsy")
+# db = pymysql.connect("localhost", "root", "12qwaszx", "newsy")
 
-cursor = db.cursor()
+# cursor = db.cursor()
 
 for i in range(num_articles):
     try:
@@ -55,4 +55,4 @@ for i in range(num_articles):
         cursor.execute(query)
         db.commit()
 
-db.close()
+# db.close()

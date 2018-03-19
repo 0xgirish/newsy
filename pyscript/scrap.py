@@ -93,7 +93,7 @@ hindustantimes_news = HT.get_urls()
 """while 1:
     print('Run something..')
 
-    dt = datetime.now() + timedelta(minutes=1)
+#     dt = datetime.now() + timedelta(minutes=1)
 
     while datetime.now() < dt:
         time.sleep(1)"""
