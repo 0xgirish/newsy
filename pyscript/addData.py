@@ -1,4 +1,4 @@
-from scrap import HT, NDTV ,TOI
+from scrap import HT, NDTV ,TOI, IDN
 from newspaper import Article
 import pymysql
 from datetime import datetime
@@ -45,11 +45,14 @@ def run():
     ht_urls = HT.get_urls()
     ndtv_urls = NDTV.get_urls()
     toi_urls = TOI.get_urls()
+    idn_urls = IDN.get_urls()
+
 
     urls = []
     urls.extend(ht_urls)
     urls.extend(ndtv_urls)
     urls.extend(toi_urls)
+    urls.extend(idn_urls)
 
     articles = artAdd(urls)
 
@@ -64,6 +67,8 @@ def run():
 
     cursor = db.cursor()
 
+    newArticles = 0
+
     for i in range(num_articles):
         try:
             if time_stamp[i] == None:
@@ -72,9 +77,13 @@ def run():
                 query = "INSERT INTO `articles`(`Title`, `description`, `source`, `time_stamp`, `link`, `image_url`) values(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")" %(pymysql.escape_string(titles[i].decode("utf-8")),pymysql.escape_string(descrp[i].decode("utf-8")), source,time_stamp[i].strftime('%Y-%m-%d %H:%M:%S'), urls[i], image_url[i])
             cursor.execute(query)
             db.commit()
+            newArticles += 1
         except pymysql.MySQLError as e:
             code, *msg = e.args
-            print("ERROR CODE: {} | {}".format(code, *msg))
-            pass
+            if code == 1062:
+                pass
+            else:
+                print("ERROR CODE: {} | {}".format(code, *msg))
 
+    print("{} new articles".format(newArticles))
     db.close()

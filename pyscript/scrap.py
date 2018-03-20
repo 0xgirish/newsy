@@ -58,3 +58,16 @@ class HT:
 					link = a['href']	
 				pages.append(link)
 		return pages
+
+class IDN:
+	@staticmethod
+	def get_urls():
+		feed_url = "http://indianexpress.com/latest-news/"
+		url = urlopen(feed_url)
+		soup = BeautifulSoup(url, 'lxml')
+		pages = []
+		for div in soup.find_all('div',{'class':'articles'}):
+			for a in div.find_all('a', href=True):
+				link = a['href']
+			pages.append(link)
+		return pages
