@@ -89,7 +89,7 @@ include "../includes/common.php";
                  
                 if($orderby==0) $query = "SELECT * FROM articles ORDER BY time_stamp DESC LIMIT ".$offset.", ".$rec_limit;
                 elseif ($orderby==1) {
-                    $query = "SELECT * FROM articles INNER JOIN (SELECT article_id ,SUM(like_type) as s from user_likes group by article_id) as t ON articles.id = t.article_id ORDER BY s DESC LIMIT ".$offset.", ".$rec_limit;
+                    $query = "SELECT * FROM articles LEFT JOIN (SELECT article_id ,SUM(like_type) as s from user_likes group by article_id) as t ON articles.id = t.article_id ORDER BY s DESC LIMIT ".$offset.", ".$rec_limit;
                 } ?>
             
              <center>
@@ -133,7 +133,7 @@ include "../includes/common.php";
                             <?php if(!(isset($_SESSION['id']))) echo "<a href='login/login.php'>"; ?>
                             <input type="button" value="Like" id="like_<?php echo $postid; ?>" class="like" style="<?php if($type == 1){ echo "color: #ffa449;"; } ?>" />&nbsp;(<span id="likes_<?php echo $postid; ?>"><?php echo $total_likes; ?></span>)&nbsp;
 
-                            <input type="button" value="Unlike" id="unlike_<?php echo $postid; ?>" class="unlike" style="<?php if($type == 0){ echo "color: #ffa449;"; } ?>" />&nbsp;(<span id="unlikes_<?php echo $postid; ?>"><?php echo $total_unlikes; ?></span>)
+                            <input type="button" value="Unlike" id="unlike_<?php echo $postid; ?>" class="unlike" style="<?php if($type == 0){ echo "color: #ffa449;"; } ?>" />&nbsp;(<span id="unlikes_<?php echo $postid; ?>"><?php echo $total_unlikes; ?></span>);
                             
                             <?php if(!(isset($_SESSION['id']))) echo "</a>"; ?>
                             

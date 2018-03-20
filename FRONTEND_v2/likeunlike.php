@@ -17,7 +17,7 @@ $count = $fetchdata['cntpost'];
 
 
 if($count == 0){
-    $insertquery = "INSERT INTO user_likes(user_id,article_id, like_type) values(".$userid.",".$postid.",".$type.")";
+    $insertquery = "INSERT INTO user_likes(user_id,article_id,like_type) values(".$userid.",".$postid.",".$type.")";
     mysqli_query($con,$insertquery);
 }else {
     $updatequery = "UPDATE user_likes SET like_type=" . $type . " where user_id=" . $userid . " and article_id=" . $postid;
@@ -31,10 +31,11 @@ $result = mysqli_query($con,$query);
 $fetchlikes = mysqli_fetch_array($result);
 $totalLikes = $fetchlikes['cntLike'];
 
-$query = "SELECT COUNT(*) AS cntUnlike FROM user_like WHERE like_type=0 and article_id=".$postid;
+$query = "SELECT COUNT(*) AS cntUnlike FROM user_likes WHERE like_type=0 and article_id=".$postid;
 $result = mysqli_query($con,$query);
 $fetchunlikes = mysqli_fetch_array($result);
-$totalUnlikes = $fetchunlikes['cntUnlike']; 
+$totalUnlikes = $fetchunlikes['cntUnlike'];
+
 
 $return_arr = array("likes"=>$totalLikes,"unlikes"=>$totalUnlikes);
 
